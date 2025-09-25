@@ -1,22 +1,66 @@
 
 # Create a simple password manager using Python Dictionaries
 
-def add_login():
+def add_login(password_manager):
+    while True:
+        site_name = input("Please enter the name of the website: ")
+        username = input('Please enter your username: ')
+        password = input('Please enter your pasword: ')
+        print()
+        if site_name in password_manager:
+            password_manager[site_name][username] = password
+        else:
+            password_manager[site_name] = {username : password}
+
+        print(f"You've just added the following to the website {site_name}")
+        print(f'Username = {username}')
+        print(f'Password = {password}')
+        print()
+        again = 'hello reader'
+        while again.lower() not in ['y','n']:
+            again = input('Would you like to add another password? (y/n): ')
+            print()
+        if again.lower() == 'n':
+            return password_manager
+
+        
+        
+
    
 
-def view_login():
-    
+def view_login(password_manager):
+    while True:
+        site_name = input('Please enter the name of the website you want to see login info for: ')
+        while site_name not in password_manager:
+            print("It seems that you haven't made a login for that website, case does matter for this (because I can't figure out how to make it not)")
+            site_name = input('Please enter the name of the website you want to see login info for: ')
+        print()
 
-def update_password():
-    
+        print(f'Logins for {site_name}')
+        for login in password_manager[site_name]:
+            print(f"\tUsername = {login}")
+            print(f'\tPassword = {password_manager[site_name][login]}')
+            print()
+        
+        again = 'hello reader'
+        while again.lower() not in ['y','n']:
+            again = input('Would you like to look at another website? (y/n): ')
+            print()
+        if again.lower() == 'n':
+            return
 
-def delete_login():
-   
+def update_password(password_manager):
+    print()
 
-def show_all_websites():
+def delete_login(password_manager):
+    print()
 
+def show_all_websites(password_manager):
+    print()
 
 def main():
+    password_manager = {'test 1' : {'user 1' : 'pass 1', 
+                                    'user 2' : 'pass 2'}}
     while True:
         print("Password Manager")
         print("1. Add new login")
@@ -25,8 +69,36 @@ def main():
         print("4. Delete login")
         print("5. Show all websites")
         print("6. Exit")
-
+        print()
         choice = input("Choose an option (1-6): ")
+        while True:
+            try: int(choice)
+            except ValueError:
+                choice = input("Please actually choose an option (1-6): ")
+            else:
+                break
+        
+        choice = int(choice)
+        match choice:
+            case 1:
+                password_manager = add_login(password_manager)
+            case 2:
+                view_login(password_manager)
+            case 3:
+                update_password(password_manager)
+            case 4:
+                delete_login(password_manager)
+            case 5:
+                show_all_websites(password_manager)
+            case 6:
+                print("Thank you for using this password manager (all your data will now be deleated)")
+                return
+            case _:
+                print(f"{choice} isn't in 1-6")
+                print()
+            
+
+        
 
 
 if __name__ == "__main__":
