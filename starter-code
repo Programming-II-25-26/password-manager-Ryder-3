@@ -59,6 +59,7 @@ def show_all_websites(password_manager):
     print()
 
 def main():
+    # get rid of default values after all done
     password_manager = {'test 1' : {'user 1' : 'pass 1', 
                                     'user 2' : 'pass 2'}}
     while True:
