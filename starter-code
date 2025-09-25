@@ -1,0 +1,33 @@
+
+# Create a simple password manager using Python Dictionaries
+
+def add_login():
+   
+
+def view_login():
+    
+
+def update_password():
+    
+
+def delete_login():
+   
+
+def show_all_websites():
+
+
+def main():
+    while True:
+        print("Password Manager")
+        print("1. Add new login")
+        print("2. View login")
+        print("3. Update password")
+        print("4. Delete login")
+        print("5. Show all websites")
+        print("6. Exit")
+
+        choice = input("Choose an option (1-6): ")
+
+
+if __name__ == "__main__":
+    main()
