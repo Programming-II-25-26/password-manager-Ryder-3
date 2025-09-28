@@ -1,9 +1,12 @@
 
 # Create a simple password manager using Python Dictionaries
 
-def add_login(password_manager):
+def addLogin(password_manager):
+    showAllWebsites(password_manager)
     while True:
-        site_name = input("Please enter the name of the website: ")
+        site_name = input("Please enter the name of the website (if you don't want to add anything, just hit enter): ")
+        if site_name == '':
+            return password_manager
         username = input('Please enter your username: ')
         password = input('Please enter your pasword: ')
         print()
@@ -23,40 +26,136 @@ def add_login(password_manager):
         if again.lower() == 'n':
             return password_manager
 
-        
-        
-
-   
-
-def view_login(password_manager):
+def viewLogin(password_manager):
     while True:
-        site_name = input('Please enter the name of the website you want to see login info for: ')
-        while site_name not in password_manager:
-            print("It seems that you haven't made a login for that website, case does matter for this (because I can't figure out how to make it not)")
-            site_name = input('Please enter the name of the website you want to see login info for: ')
-        print()
+        if len(password_manager) > 0:
+            showAllWebsites(password_manager)
+            site_name = input("Please enter the name of the website you want to see login info for (if you don't want to look at anything, just hit enter): ")
+            if site_name == '':
+                return
+            while site_name not in password_manager:
+                print("It seems that you haven't made a login for that website, case does matter for this (because I can't figure out how to make it not)")
+                site_name = input("Please enter the name of the website you want to see login info for(if you don't want to look at anything, just hit enter): ")
+                if site_name == '':
+                    return
+            print()
 
-        print(f'Logins for {site_name}')
-        for login in password_manager[site_name]:
-            print(f"\tUsername = {login}")
-            print(f'\tPassword = {password_manager[site_name][login]}')
-            print()
-        
-        again = 'hello reader'
-        while again.lower() not in ['y','n']:
-            again = input('Would you like to look at another website? (y/n): ')
-            print()
-        if again.lower() == 'n':
+            print(f'Logins for {site_name}')
+            for login in password_manager[site_name]:
+                print(f"\tUsername = {login}")
+                print(f'\tPassword = {password_manager[site_name][login]}')
+                print()
+            
+            again = 'hello reader'
+            while again.lower() not in ['y','n']:
+                again = input('Would you like to look at another website? (y/n): ')
+                print()
+            if again.lower() == 'n':
+                return
+        else:
+            print("You haven't made any accounts yet")
             return
 
-def update_password(password_manager):
+def updatePassword(password_manager):
+    if len(password_manager) > 0:
+        while True:
+            while True:
+                showAllWebsites(password_manager)
+                site_name = input("Please enter the website you want to change a password in (if you don't want to change anything, just hit enter): ")
+                if site_name == '':
+                    return password_manager
+                while site_name not in password_manager:
+                    print("Sorry, you haven't made an account for that website yet")
+                    site_name = input("Please enter the website you want to change a password in (if you don't want to change anything, just hit enter): ")
+                    if site_name == '':
+                        return password_manager
+                print()
+                
+                print(f'Logins for {site_name}')
+                for login in password_manager[site_name]:
+                    print(f"\tUsername = {login}")
+                    print()
+                    
+                account = input("Please enter the username for the account who's password you want to change: ")
+                while account not in password_manager[site_name]:
+                    print("It seems you don't have an account of that name in this site")
+                    account = input("Please enter the username for the accont who's password you want to change: ")
+                print()
+
+                print(f"You're changing the password for the account {account} in the website {site_name}.")
+                new_password = input("Please enter your new password: ")
+                ready = 'Hi reader!'
+                while ready.lower() not in ['y','n']:
+                    ready = input(f"You want to change the password for {account} from {password_manager[site_name][account]} to {new_password}, right? (y/n): ")
+                if ready.lower() == 'y':
+                    print("Password changed!")
+                    print()
+                    password_manager[site_name][account] = new_password
+                    break
+            done = input('Would you like to change another password? (y/n): ')
+            while done.lower() not in ['y','n']:
+                done = input('Would you like to change another password? (y/n): ')
+            if done.lower() == 'n':
+                print()
+                return password_manager
+            print()
+    else:
+        print("You haven't made any accounts yet")
+        return password_manager
+
+def deleteLogin(password_manager):
+    while True:
+        if len(password_manager) > 0:
+                showAllWebsites(password_manager)
+                site_name = input("Please enter the website you want to delete a login from (if you don't want to delete anything, just hit enter): ")
+                if site_name == '':
+                    return password_manager
+                while site_name not in password_manager:
+                    print("It seems that you haven't made a login for that site yet")
+                    site_name = input("Please enter the website you want to delete a login from (if you don't want to delete anything, just hit enter): ")
+                    if site_name == '':
+                        return password_manager
+                print("Current accounts:")
+                for login in password_manager[site_name]:
+                    print(f"\tUsername = {login}")
+                    print()
+
+                
+                account = input("Please enter the username for the login you want to delete (case matters): ")
+                while account not in password_manager[site_name]:
+                    account = input("Please enter the username for the login you want to delete (case matters): ")
+                print()
+
+                print("Login deleted!")
+                print()
+                password_manager[site_name].pop(account)
+
+                if len(password_manager[site_name]) == 0:
+                    print(f"{site_name} had no accounts in it, so it was deleted")
+                    password_manager.pop(site_name)
+
+
+                done = input('Would you like to delete another password? (y/n): ')
+                while done.lower() not in ['y','n']:
+                    done = input('Would you like to delete another password? (y/n): ')
+                if done.lower() == 'n':
+                    print()
+                    return password_manager
+                print()
+            
+        else:
+            print("You haven't made any accounts yet")
+            return password_manager
+
+def showAllWebsites(password_manager):
+    if len(password_manager) > 0:
+        print("Here are all the websites you have accounts for: ")
+        for site in password_manager:
+            print(site)
+    else:
+        print("You've not saved any accounts yet")
     print()
 
-def delete_login(password_manager):
-    print()
-
-def show_all_websites(password_manager):
-    print()
 
 def main():
     # get rid of default values after all done
@@ -82,19 +181,26 @@ def main():
         choice = int(choice)
         match choice:
             case 1:
-                password_manager = add_login(password_manager)
+                print()
+                password_manager = addLogin(password_manager)
             case 2:
-                view_login(password_manager)
+                print()
+                viewLogin(password_manager)
             case 3:
-                update_password(password_manager)
+                print()
+                password_manager = updatePassword(password_manager)
             case 4:
-                delete_login(password_manager)
+                print()
+                password_manager = deleteLogin(password_manager)
             case 5:
-                show_all_websites(password_manager)
+                print()
+                showAllWebsites(password_manager)
             case 6:
+                print()
                 print("Thank you for using this password manager (all your data will now be deleated)")
                 return
             case _:
+                print()
                 print(f"{choice} isn't in 1-6")
                 print()
             
